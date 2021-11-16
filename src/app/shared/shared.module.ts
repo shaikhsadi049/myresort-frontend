@@ -34,6 +34,12 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HomeComponent } from './components/home/home.component';
+import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
+import { LayoutModule } from '@angular/cdk/layout';
+import { NavService } from './components/nav-menu/service/nav-menu.service';
+
+import { MenuListItemComponent } from './components/nav-menu/menu-list-item/menu-list-item.component';
+import { TopNavComponent } from './components/nav-menu/top-nav/top-nav.component';
 
 @NgModule({
   imports: [
@@ -73,6 +79,7 @@ import { HomeComponent } from './components/home/home.component';
     MatStepperModule,
     ReactiveFormsModule,
     FormsModule,
+    LayoutModule,
   ],
   exports: [
     CommonModule,
@@ -111,10 +118,17 @@ import { HomeComponent } from './components/home/home.component';
     MatStepperModule,
     ReactiveFormsModule,
     FormsModule,
-    HomeComponent
+    HomeComponent,
+    NavMenuComponent,
+    MenuListItemComponent,
+    TopNavComponent
+
   ],
   declarations: [
-    HomeComponent
+    HomeComponent,
+    NavMenuComponent,
+    MenuListItemComponent,
+    TopNavComponent
   ],
   entryComponents: [],
 })
@@ -122,7 +136,7 @@ export class SharedModule {
   static forRoot(): ModuleWithProviders<SharedModule> {
     return {
       ngModule: SharedModule,
-      providers: [],
+      providers: [NavService],
     };
   }
 }
