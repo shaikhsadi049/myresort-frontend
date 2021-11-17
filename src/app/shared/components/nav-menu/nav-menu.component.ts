@@ -8,8 +8,8 @@ import {
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { NavService } from './service/nav-menu.service';
-import { NavItem } from './nav.item';
+import { NavService } from './services/nav-menu.service';
+import { NavItem } from '../../models/nav.item';
 
 @Component({
   selector: 'nav-menu',

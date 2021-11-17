@@ -36,7 +36,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HomeComponent } from './components/home/home.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import { NavService } from './components/nav-menu/service/nav-menu.service';
+import { NavService } from './components/nav-menu/services/nav-menu.service';
 
 import { MenuListItemComponent } from './components/nav-menu/menu-list-item/menu-list-item.component';
 import { TopNavComponent } from './components/nav-menu/top-nav/top-nav.component';
