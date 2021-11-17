@@ -38,8 +38,8 @@ import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { NavService } from './services/nav-menu.service';
 
-import { MenuListItemComponent } from './components/nav-menu/menu-list-item/menu-list-item.component';
-import { TopNavComponent } from './components/nav-menu/top-nav/top-nav.component';
+import { MenuListItemComponent } from './components/menu-list-item/menu-list-item.component';
+import { TopNavComponent } from './components/top-nav/top-nav.component';
 
 @NgModule({
   imports: [
