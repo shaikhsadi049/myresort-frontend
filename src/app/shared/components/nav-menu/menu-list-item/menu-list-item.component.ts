@@ -3,7 +3,7 @@ import {Component, HostBinding, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import { NavService } from '../services/nav-menu.service';
+import { NavService } from '../../../services/nav-menu.service';
 import { NavItem } from '../../../models/nav.item';
 
 
