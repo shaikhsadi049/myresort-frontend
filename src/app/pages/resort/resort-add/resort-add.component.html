@@ -1,1 +1,41 @@
-<p>resort-add works!</p>
+<form
+  [id]="formId"
+  [formGroup]="form"
+  (ngSubmit)="onAddResort(form.value)"
+  novalidate
+>
+  <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column">
+    <div
+      fxLayout="coloum wrap"
+      fxLayoutGap="10px"
+      fxFlex="100%"
+      fxFlex.sm="100%"
+      fxLayout.lt-sm="column"
+      fxFlex.xs="100%"
+      fxLayoutAlign="flex-start"
+    >
+      <mat-form-field
+        fxFlex="0 1 calc(33.33% - 10px)"
+        fxFlex.lt-md="0 1 calc(50% - 10px)"
+        fxFlex.lt-sm="100%"
+        fxFlex.xs="100%"
+        appearance="fill"
+      >
+        <mat-label>Resort Name</mat-label>
+        <input
+          matInput
+          placeholder="Resort Name"
+          formControlName="resortName"
+          required
+        />
+        <mat-error
+          *ngIf="resortName.invalid && (resortName.dirty || resortName.touched)"
+        >
+          <ng-container *ngIf="resortName.hasError('required')"
+            >Resort Name is required.</ng-container
+          >
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</form>
