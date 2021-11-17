@@ -34,12 +34,12 @@ export class NavMenuComponent implements AfterViewInit {
       children: [
         {
           displayName: 'Resort List',
-          iconName: 'format_list_bulleted',
+          iconName: 'checklist',
           route: '/resort',
         },
         {
           displayName: 'Resort ADD',
-          iconName: 'add',
+          iconName: 'add_circle_outline',
           route: '/resort/add',
         },
       ],
@@ -55,7 +55,7 @@ export class NavMenuComponent implements AfterViewInit {
         },
         {
           displayName: 'Room ADD',
-          iconName: 'add',
+          iconName: 'add_circle',
           route: '/room/add',
         },
       ],
