@@ -3,7 +3,29 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
-@Injectable()
+
+
+
+const baseUrl = 'http://localhost:3000/api/resort/add';
+
+@Injectable({
+  providedIn: 'root',
+})
+
+
 export class ResortService {
+
+
   constructor(private http: HttpClient) {}
+
+
+  resortAdd(obj: any): Observable<any> {
+    return this.http.post(baseUrl, obj);
+  }
+
+  
+  resortList(): Observable<any> {
+    return this.http.get(baseUrl);
+  }
+
 }

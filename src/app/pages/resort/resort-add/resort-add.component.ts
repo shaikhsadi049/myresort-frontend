@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { ResortService } from '../service/resort.service';
 
 @Component({
   selector: 'app-resort-add',
@@ -12,7 +13,7 @@ export class ResortAddComponent implements OnInit {
   form: FormGroup;
   addResortSub: Subscription;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private resortService: ResortService) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -70,9 +71,26 @@ export class ResortAddComponent implements OnInit {
   onAddResort() {
     if (this.form.valid) {
       console.log(this.form.value, `form-values`);
-      // this.addResortSub =
+
+      this.addResortSub = this.resortService.resortAdd(this.form.value).subscribe(
+        (response) => {
+          this.form.reset();
+          console.log(response, `response`);
+       
+        },
+        (err) => {
+          console.log(err, `errrrrrrr`);
+        }
+      );
     } else {
       alert(`ALL FIELD REQUIRED!!`);
     }
   }
+
+
+ ngOnDestroy(): void {
+  this.addResortSub.unsubscribe;
+ }
+
+
 }
