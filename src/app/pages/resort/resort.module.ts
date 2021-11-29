@@ -8,8 +8,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
 
 export const routes = [
   { path: '', component: ResortListComponent, pathMatch: 'full' },
-  { path: 'add', component: ResortAddComponent, pathMatch: 'full' },
-  { path: 'details/:robotName', component: ResortDetailsComponent },
+  { path: 'add', component: ResortAddComponent },
+
+  { path: 'details/:resortid', component: ResortDetailsComponent },
 ];
 
 @NgModule({

@@ -1,16 +1,9 @@
-
-  <mat-form-field
+<mat-form-field
   appearance="legacy"
   style="display: flex; justify-content: flex-end"
 >
   <mat-label>Search</mat-label>
-  <input
-    matInput
-    type="text"
-    placeholder="Search"
-    [formControl]="myControl"
-
-  />
+  <input matInput type="text" placeholder="Search" [formControl]="myControl" />
 </mat-form-field>
 <br />
 <ng-container>
@@ -35,21 +28,116 @@
       >
         <div style="width: 100%; display: flex; flex-direction: row">
           <div style="width: 90%">
-            <p>   Name:&nbsp;{{ item.resortName }}</p>
+            <strong> Resort Name:&nbsp;{{ item.resortName }}</strong> <br />
+            Address:&nbsp;{{ item.address }} <br />
+            Phone:&nbsp;{{ item.cellNo }} <br />
+            Email:&nbsp; <i> {{ item.email }} </i>
 
+            <div
+              style="width: 10%; display: flex; flex-direction: row"
+              class="button-group"
+            >
+              <button
+                mat-icon-button
+                class="btt-service"
+                *ngIf="item.isBreakfastExist"
+              >
+                <i
+                  class="material-icons"
+                  matTooltip="Break Fast"
+                  style="font-size: 17px !important"
+                >
+                  free_breakfast</i
+                >
+              </button>
+
+              <button
+                mat-icon-button
+                class="btt-service"
+                *ngIf="item.isWifiExist"
+              >
+                <i
+                  class="material-icons"
+                  matTooltip="wifi"
+                  style="font-size: 17px !important"
+                >
+                  wifi</i
+                >
+              </button>
+
+              <button
+                mat-icon-button
+                class="btt-service"
+                *ngIf="item.isBBQExist"
+              >
+                <i
+                  class="material-icons"
+                  matTooltip="BBQ"
+                  style="font-size: 17px !important"
+                >
+                  outdoor_grill</i
+                >
+              </button>
+
+              <button
+                mat-icon-button
+                class="btt-service"
+                *ngIf="item.isLaundryExist"
+              >
+                <i
+                  class="material-icons"
+                  matTooltip="Laundry"
+                  style="font-size: 17px !important"
+                >
+                  iron</i
+                >
+              </button>
+
+              <button
+                mat-icon-button
+                class="btt-service"
+                *ngIf="item.isParkingExist"
+              >
+                <i
+                  class="material-icons"
+                  matTooltip="Parking"
+                  style="font-size: 17px !important"
+                >
+                  local_parking</i
+                >
+              </button>
+
+              <button
+                mat-icon-button
+                class="btt-service"
+                *ngIf="item.isOutdoorPoolExist"
+              >
+                <i
+                  class="material-icons"
+                  matTooltip="Pool"
+                  style="font-size: 17px !important"
+                >
+                  pool</i
+                >
+              </button>
+            </div>
           </div>
-          <div style="width: 10%; display: flex; flex-direction: column">
-            <button mat-icon-button class="btt" >
+
+          <div
+            style="width: 10%; display: flex; flex-direction: column"
+            class="button-group"
+          >
+            <button mat-icon-button class="btt">
               <i
                 class="material-icons"
-                [routerLink]="['/item/details', item._id]"
+                routerLink="/resort/details/{{ item._id }}"
                 matTooltip="Details"
                 style="font-size: 17px !important"
               >
                 double_arrow</i
               >
             </button>
-            <button mat-icon-button class="btt" >
+            <button mat-icon-button class="btt">
               <i
                 class="material-icons"
                 [routerLink]="['/item/edit', item._id]"
@@ -59,11 +147,7 @@
                 edit
               </i>
             </button>
-            <button
-              mat-icon-button
-              class="btt"
-
-            >
+            <button mat-icon-button class="btt">
               <i
                 class="material-icons"
                 (click)="deleteItem(item._id)"

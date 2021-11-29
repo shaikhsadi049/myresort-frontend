@@ -7,5 +7,7 @@ export class Resort {
   isParkingExist: boolean;
   isOutdoorPoolExist: boolean;
   isLaundryExist: boolean;
+  isBreakfastExist: boolean;
   isBBQExist: boolean;
+  _id?: string;
 }

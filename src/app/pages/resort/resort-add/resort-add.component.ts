@@ -72,25 +72,25 @@ export class ResortAddComponent implements OnInit {
     if (this.form.valid) {
       console.log(this.form.value, `form-values`);
 
-      this.addResortSub = this.resortService.resortAdd(this.form.value).subscribe(
-        (response) => {
-          this.form.reset();
-          console.log(response, `response`);
-       
-        },
-        (err) => {
-          console.log(err, `errrrrrrr`);
-        }
-      );
+      this.addResortSub = this.resortService
+        .resortAdd(this.form.value)
+        .subscribe(
+          (response) => {
+            this.form.reset();
+            console.log(response, `response`);
+          },
+          (err) => {
+            console.log(err, `errrrrrrr`);
+          }
+        );
     } else {
       alert(`ALL FIELD REQUIRED!!`);
     }
   }
 
-
- ngOnDestroy(): void {
-  this.addResortSub.unsubscribe;
- }
-
-
+  ngOnDestroy(): void {
+    if (this.addResortSub) {
+      this.addResortSub.unsubscribe();
+    }
+  }
 }
