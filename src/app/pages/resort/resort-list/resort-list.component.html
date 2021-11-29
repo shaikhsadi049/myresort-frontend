@@ -1,5 +1,85 @@
-<mat-list role="list">
 
-    <mat-list-item role="listitem" *ngFor="let resort of resortListArr"  >{{ resort.resortName }}</mat-list-item>
+  <mat-form-field
+  appearance="legacy"
+  style="display: flex; justify-content: flex-end"
+>
+  <mat-label>Search</mat-label>
+  <input
+    matInput
+    type="text"
+    placeholder="Search"
+    [formControl]="myControl"
 
-  </mat-list>
+  />
+</mat-form-field>
+<br />
+<ng-container>
+  <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column">
+    <div
+      fxLayout="row wrap"
+      fxLayoutGap="10px"
+      fxFlex="100%"
+      fxFlex.sm="50%"
+      fxLayout.lt-sm="column"
+      fxFlex.xs="100%"
+      fxLayoutAlign="flex-start"
+    >
+      <mat-card
+        *ngFor="let item of resortListArr"
+        fxFlex="0 1 calc(25% - 10px)"
+        fxFlex.lt-md="0 1 calc(33.33% - 10px)"
+        fxFlex.lt-sm="50%"
+        fxFlex.xs="50%"
+        appearance="fill"
+        class="pp"
+      >
+        <div style="width: 100%; display: flex; flex-direction: row">
+          <div style="width: 90%">
+            <p>   Name:&nbsp;{{ item.resortName }}</p>
+
+          </div>
+          <div style="width: 10%; display: flex; flex-direction: column">
+            <button mat-icon-button class="btt" >
+              <i
+                class="material-icons"
+                [routerLink]="['/item/details', item._id]"
+                matTooltip="Details"
+                style="font-size: 17px !important"
+              >
+                double_arrow</i
+              >
+            </button>
+            <button mat-icon-button class="btt" >
+              <i
+                class="material-icons"
+                [routerLink]="['/item/edit', item._id]"
+                matTooltip="Edit"
+                style="font-size: 17px !important"
+              >
+                edit
+              </i>
+            </button>
+            <button
+              mat-icon-button
+              class="btt"
+
+            >
+              <i
+                class="material-icons"
+                (click)="deleteItem(item._id)"
+                matTooltip="Delete"
+                style="font-size: 17px !important"
+              >
+                delete
+              </i>
+            </button>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+  <mat-paginator
+    [length]="totalRecords"
+    [pageSizeOptions]="[8, 25, 50, 100]"
+  ></mat-paginator>
+</ng-container>

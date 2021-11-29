@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Subscriber, Subscription } from 'rxjs';
 import { Resort } from '../model/resort.model';
 import { ResortService } from '../service/resort.service';
 
@@ -10,6 +12,9 @@ import { ResortService } from '../service/resort.service';
 export class ResortListComponent implements OnInit {
 
  resortListArr: any[];
+ totalRecords = 0;
+ myControl = new FormControl();
+ resortViewSub : Subscription;
 
 //  resortList: Resort = {
 //    resortName: '',
@@ -27,18 +32,38 @@ export class ResortListComponent implements OnInit {
   constructor(private resortService: ResortService) { }
 
   ngOnInit(): void {
-    this.getTutorialList();
+    this.getResortList();
   }
 
 
-  getTutorialList() {
-    this.resortService.resortList().subscribe((data) => {
-      if (data) {
-        this.resortListArr = data;
+  getResortList() {
+    this.resortViewSub = this.resortService.resortList().subscribe((data) => {
+      if (data && data.data.length) {
+        this.resortListArr = data.data;
+        // console.log(data);
+        // this.resortListArr = Array.of(this.resortListArr);
+         this.totalRecords = this.resortListArr.length;
+         console.log(this.resortListArr);
       }
     });
   }
 
 
+  Search(e: string) {
+
+  }
+
+   
+
+  deleteItem(id: string): void {
+
+  }
+
+  ngOnDestroy() {
+    if (this.resortViewSub) {
+      this.resortViewSub.unsubscribe();
+    }
+
+  }
 
 }
