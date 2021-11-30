@@ -9,6 +9,12 @@
     </mat-nav-list>
   </mat-sidenav>
   <app-top-nav fxHide.xs></app-top-nav>
+  <mat-progress-bar
+    class="card-header-progress"
+    *ngIf="isLoading"
+    mode="indeterminate"
+  >
+  </mat-progress-bar>
   <router-outlet></router-outlet>
 </mat-sidenav-container>
 <!-- <span class="version-info">Current build: {{version.full ? version.full : version}}</span> -->

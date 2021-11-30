@@ -79,7 +79,7 @@ import { TopNavComponent } from './components/top-nav/top-nav.component';
     MatStepperModule,
     ReactiveFormsModule,
     FormsModule,
-    LayoutModule,
+    LayoutModule
   ],
   exports: [
     CommonModule,
@@ -122,7 +122,6 @@ import { TopNavComponent } from './components/top-nav/top-nav.component';
     NavMenuComponent,
     MenuListItemComponent,
     TopNavComponent
-
   ],
   declarations: [
     HomeComponent,

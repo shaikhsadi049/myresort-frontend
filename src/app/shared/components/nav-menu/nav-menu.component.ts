@@ -1,24 +1,30 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
+  OnDestroy,
+  OnInit,
   VERSION,
   ViewChild,
 } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { NavService } from '../../services/nav-menu.service';
 import { NavItem } from '../../models/nav.item';
+import { AsyncService } from '../../services/async.service';
 
 @Component({
   selector: 'nav-menu',
   templateUrl: './nav-menu.component.html',
   styleUrls: ['./nav-menu.component.scss'],
 })
-export class NavMenuComponent implements AfterViewInit {
+export class NavMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('appDrawer') appDrawer: ElementRef | any;
   version = VERSION;
+  isLoading = false;
+  asyncSub: Subscription;
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
@@ -64,10 +70,25 @@ export class NavMenuComponent implements AfterViewInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private navService: NavService
+    private navService: NavService,
+    private asyncService: AsyncService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
+
+  ngOnInit(): void {
+    this.asyncSub = this.asyncService.isLoading.subscribe((loading) => {
+      this.isLoading = loading;
+      this.changeDetectorRef.detectChanges();
+    });
+  }
 
   ngAfterViewInit() {
     this.navService.appDrawer = this.appDrawer;
+  }
+
+  ngOnDestroy() {
+    if (this.asyncSub) {
+      this.asyncSub.unsubscribe();
+    }
   }
 }

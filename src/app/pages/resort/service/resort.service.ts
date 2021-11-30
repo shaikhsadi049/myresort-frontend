@@ -23,4 +23,14 @@ export class ResortService {
   getResortById(id: string): Observable<any> {
     return this.http.get(`${resortUrl}/details/${id}`);
   }
+
+  getResortAutoComplete(item: string): Observable<any> {
+    // return this.http.post(`${resortUrl}/autocomplete`, { item });
+    return this.http.post(`${resortUrl}/autocomplete`, { item }).pipe(
+      map((response: any) =>
+        response.isExecuted && response.data ? response.data : []
+      ),
+      catchError((error) => of([]))
+    );
+  }
 }
