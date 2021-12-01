@@ -9,11 +9,13 @@ import {
   ViewChild,
 } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { NavService } from '../../services/nav-menu.service';
 import { NavItem } from '../../models/nav.item';
 import { AsyncService } from '../../services/async.service';
+import { UIInfo } from '../../models/ui-info.model';
+import { CommonService } from '../../services/common.service';
 
 @Component({
   selector: 'nav-menu',
@@ -25,6 +27,16 @@ export class NavMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   version = VERSION;
   isLoading = false;
   asyncSub: Subscription;
+
+  mobileQuery: MediaQueryList;
+  isLoggedIn$: Observable<boolean> = of(false);
+  isFullScreen = false;
+  uiInfo: UIInfo;
+  // navItems: NavItem[] = NavigationList.items;
+  // @Input() navItems: NavItem;
+  private authSub: Subscription;
+  private uiInfoSub: Subscription;
+  worklist: any;
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
@@ -72,10 +84,17 @@ export class NavMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private navService: NavService,
     private asyncService: AsyncService,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private commonService: CommonService
   ) {}
 
   ngOnInit(): void {
+    // this.isLoggedIn$ = this.authService.isLoggedIn;
+    this.uiInfoSub = this.commonService.uiInfo.subscribe((uiInfo) => {
+      this.uiInfo = uiInfo;
+      this.changeDetectorRef.detectChanges();
+    });
+
     this.asyncSub = this.asyncService.isLoading.subscribe((loading) => {
       this.isLoading = loading;
       this.changeDetectorRef.detectChanges();
@@ -89,6 +108,41 @@ export class NavMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     if (this.asyncSub) {
       this.asyncSub.unsubscribe();
+    }
+  }
+
+  toggleFullScreen(): void {
+    this.isFullScreen = !this.isFullScreen;
+    if (this.isFullScreen) {
+      this.goFullScreen();
+    } else {
+      this.exitFullScreen();
+    }
+  }
+
+  private goFullScreen(): void {
+    const docElm = document.documentElement as any;
+    if (docElm.requestFullscreen) {
+      docElm.requestFullscreen();
+    } else if (docElm.mozRequestFullScreen) {
+      docElm.mozRequestFullScreen();
+    } else if (docElm.webkitRequestFullScreen) {
+      docElm.webkitRequestFullScreen();
+    } else if (docElm.msRequestFullscreen) {
+      docElm.msRequestFullscreen();
+    }
+  }
+
+  private exitFullScreen(): void {
+    const doc = document as any;
+    if (doc.exitFullscreen) {
+      doc.exitFullscreen();
+    } else if (doc.mozCancelFullScreen) {
+      doc.mozCancelFullScreen();
+    } else if (doc.webkitCancelFullScreen) {
+      doc.webkitCancelFullScreen();
+    } else if (doc.msExitFullscreen) {
+      doc.msExitFullscreen();
     }
   }
 }

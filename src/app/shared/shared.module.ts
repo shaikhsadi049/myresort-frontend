@@ -10,7 +10,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogModule } from '@angular/material/dialog';
+
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
@@ -37,9 +37,11 @@ import { HomeComponent } from './components/home/home.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { NavService } from './services/nav-menu.service';
-
 import { MenuListItemComponent } from './components/menu-list-item/menu-list-item.component';
 import { TopNavComponent } from './components/top-nav/top-nav.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from './components/confirmation-dialog.component';
+import { CommonService } from './services/common.service';
 
 @NgModule({
   imports: [
@@ -79,7 +81,7 @@ import { TopNavComponent } from './components/top-nav/top-nav.component';
     MatStepperModule,
     ReactiveFormsModule,
     FormsModule,
-    LayoutModule
+    LayoutModule,
   ],
   exports: [
     CommonModule,
@@ -121,21 +123,22 @@ import { TopNavComponent } from './components/top-nav/top-nav.component';
     HomeComponent,
     NavMenuComponent,
     MenuListItemComponent,
-    TopNavComponent
+    TopNavComponent,
   ],
   declarations: [
     HomeComponent,
     NavMenuComponent,
     MenuListItemComponent,
-    TopNavComponent
+    TopNavComponent,
+    ConfirmDialogComponent,
   ],
-  entryComponents: [],
+  entryComponents: [ConfirmDialogComponent],
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders<SharedModule> {
     return {
       ngModule: SharedModule,
-      providers: [NavService],
+      providers: [NavService,CommonService],
     };
   }
 }

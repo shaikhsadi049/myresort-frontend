@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { AsyncService } from 'src/app/shared/services/async.service';
+import { CommonService } from 'src/app/shared/services/common.service';
 import { ResortService } from '../../resort/service/resort.service';
 
 @Component({
@@ -19,7 +20,8 @@ export class RoomAddComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private resortService: ResortService,
-    private asyncService: AsyncService
+    private asyncService: AsyncService,
+    private commonService: CommonService  
   ) {}
 
   ngOnInit(): void {
@@ -31,6 +33,18 @@ export class RoomAddComponent implements OnInit {
       price: [''],
       isVatIncluded: [''],
     });
+
+
+    this.commonService.setUiInfo({
+      formId: this.formId,
+      goBackPath: '',
+      title: 'Room Add',
+    });
+ 
+
+
+
+
 
     this.filteredResort = this.resortName.valueChanges.pipe(
       startWith(''),

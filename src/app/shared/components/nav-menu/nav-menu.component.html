@@ -9,12 +9,162 @@
     </mat-nav-list>
   </mat-sidenav>
   <app-top-nav fxHide.xs></app-top-nav>
-  <mat-progress-bar
-    class="card-header-progress"
-    *ngIf="isLoading"
-    mode="indeterminate"
+
+  <mat-card
   >
-  </mat-progress-bar>
-  <router-outlet></router-outlet>
+    <mat-card-header  class="nav card-header">
+      <mat-progress-bar
+        class="card-header-progress"
+        *ngIf="isLoading"
+        mode="indeterminate"
+      >
+      </mat-progress-bar>
+      <div class="card-header-content">
+        <div class="card-header-navigation">
+          <a
+            [routerLink]="['/']"
+            mat-icon-button
+            matTooltip="Home"
+            [color]="'primary'"
+          >
+            <mat-icon>home</mat-icon>
+          </a>
+          {{ uiInfo?.title }}
+        </div>
+        <div *ngIf="uiInfo" class="nav-ui-actions">
+          <ng-container
+            *ngTemplateOutlet="uiInfo?.additionalComponent"
+          ></ng-container>
+
+          <button
+            type="button"
+            *ngIf="uiInfo?.goFullScreen || isFullScreen"
+            mat-icon-button
+            color="accent"
+            matTooltip="Maximize to fullscreen"
+            (click)="toggleFullScreen()"
+          >
+            <mat-icon>{{
+              isFullScreen ? "fullscreen_exit" : "fullscreen"
+            }}</mat-icon>
+          </button>
+          <button
+            [disabled]="isLoading"
+            type="button"
+            *ngIf="uiInfo?.draft"
+            mat-icon-button
+            color="accent"
+            matTooltip="Save As Draft"
+            (click)="uiInfo?.draft()"
+          >
+            <mat-icon>tab</mat-icon>
+          </button>
+          <a
+            [routerLink]="[uiInfo?.editPath]"
+            *ngIf="uiInfo?.editPath && worklist?.canEdit"
+            mat-icon-button
+            matTooltip="Edit"
+          >
+            <mat-icon>edit</mat-icon>
+          </a>
+          <a
+            [routerLink]="[uiInfo?.goBackPath]"
+            *ngIf="uiInfo?.goBackPath"
+            mat-icon-button
+            matTooltip="Go Back"
+          >
+            <mat-icon>arrow_back</mat-icon>
+          </a>
+          <a
+            *ngIf="uiInfo?.goBack"
+            mat-icon-button
+            matTooltip="Back"
+            (click)="uiInfo?.goBack()"
+          >
+            <mat-icon>arrow_back</mat-icon>
+          </a>
+          <a
+            *ngIf="uiInfo?.goNext"
+            mat-icon-button
+            matTooltip="Next"
+            (click)="uiInfo?.goNext()"
+          >
+            <mat-icon>arrow_forward</mat-icon>
+          </a>
+          <a
+            [routerLink]="[uiInfo?.refreshPath]"
+            *ngIf="uiInfo?.refreshPath"
+            mat-icon-button
+            matTooltip="Refresh"
+          >
+            <mat-icon>refresh</mat-icon>
+          </a>
+          <button
+            type="button"
+            *ngIf="uiInfo?.refresh"
+            mat-icon-button
+            color="accent"
+            matTooltip="Refresh"
+            (click)="uiInfo?.refresh()"
+          >
+            <mat-icon>refresh</mat-icon>
+          </button>
+          <a
+            [routerLink]="[uiInfo?.addNewPath]"
+            *ngIf="uiInfo?.addNewPath"
+            mat-icon-button
+            matTooltip="Add New"
+            color="accent"
+          >
+            <mat-icon>add_box</mat-icon>
+          </a>
+          <button
+            type="button"
+            mat-icon-button
+            *ngIf="uiInfo?.addNew"
+            color="accent"
+            matTooltip="Add New"
+            (click)="uiInfo?.addNew()"
+          >
+            <mat-icon>add_box</mat-icon>
+          </button>
+          <button
+            type="reset"
+            [attr.form]="uiInfo?.formId"
+            *ngIf="uiInfo?.formId"
+            mat-icon-button
+            color="primary"
+            matTooltip="Reset"
+          >
+            <mat-icon>cancel</mat-icon>
+          </button>
+          <button
+            [disabled]="isLoading"
+            type="submit"
+            [attr.form]="uiInfo?.formId"
+            *ngIf="uiInfo?.formId"
+            mat-icon-button
+            color="accent"
+            matTooltip="Save Changes"
+          >
+            <mat-icon>save</mat-icon>
+          </button>
+          <button
+            [disabled]="isLoading"
+            type="button"
+            *ngIf="uiInfo?.submitAll"
+            mat-icon-button
+            color="accent"
+            matTooltip="Submit"
+            (click)="uiInfo?.submitAll()"
+          >
+            <mat-icon>save</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <router-outlet></router-outlet>
+    </mat-card-content>
+  </mat-card>
 </mat-sidenav-container>
-<!-- <span class="version-info">Current build: {{version.full ? version.full : version}}</span> -->
