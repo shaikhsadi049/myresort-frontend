@@ -21,7 +21,7 @@ export class RoomAddComponent implements OnInit {
     private fb: FormBuilder,
     private resortService: ResortService,
     private asyncService: AsyncService,
-    private commonService: CommonService  
+    private commonService: CommonService
   ) {}
 
   ngOnInit(): void {
@@ -34,17 +34,11 @@ export class RoomAddComponent implements OnInit {
       isVatIncluded: [''],
     });
 
-
     this.commonService.setUiInfo({
       formId: this.formId,
-      goBackPath: '',
+      goBackPath: '/room',
       title: 'Room Add',
     });
- 
-
-
-
-
 
     this.filteredResort = this.resortName.valueChanges.pipe(
       startWith(''),

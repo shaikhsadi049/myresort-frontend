@@ -1,92 +1,61 @@
+// import { AuthService } from './../../../auth/auth.service';
+import { MediaMatcher } from '@angular/cdk/layout';
 import {
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   OnDestroy,
   OnInit,
-  VERSION,
   ViewChild,
+  AfterViewInit,
+  Input,
 } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable, of, Subscription } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
-import { NavService } from '../../services/nav-menu.service';
-import { NavItem } from '../../models/nav.item';
-import { AsyncService } from '../../services/async.service';
+import { Observable, Subscription, of } from 'rxjs';
+import { Router } from '@angular/router';
+import { MatSidenav } from '@angular/material/sidenav';
+// import { Auth } from '../../../auth/models/auth.model';
 import { UIInfo } from '../../models/ui-info.model';
 import { CommonService } from '../../services/common.service';
+import { AsyncService } from '../../services/async.service';
+import { NavService } from '../../services/nav-menu.service';
+import { NavItem } from '../../models/nav.item';
+import { NavigationList } from '../../data/navigation-list.data';
 
 @Component({
   selector: 'nav-menu',
-  templateUrl: './nav-menu.component.html',
-  styleUrls: ['./nav-menu.component.scss'],
+  templateUrl: 'nav-menu.component.html',
+  styleUrls: ['nav-menu.component.scss'],
 })
 export class NavMenuComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('appDrawer') appDrawer: ElementRef | any;
-  version = VERSION;
-  isLoading = false;
-  asyncSub: Subscription;
-
+  @ViewChild('appDrawer') appDrawer: MatSidenav;
   mobileQuery: MediaQueryList;
   isLoggedIn$: Observable<boolean> = of(false);
+  isLoading: boolean;
   isFullScreen = false;
+  // authInfo: Auth;
   uiInfo: UIInfo;
-  // navItems: NavItem[] = NavigationList.items;
+  navItems: NavItem[] = NavigationList.items;
   // @Input() navItems: NavItem;
   private authSub: Subscription;
   private uiInfoSub: Subscription;
-  worklist: any;
+  private asyncSub: Subscription;
+  defaultsrc = '/assets/images/avatar_square_blue.png';
 
-  isHandset$: Observable<boolean> = this.breakpointObserver
-    .observe(Breakpoints.Handset)
-    .pipe(
-      map((result) => result.matches),
-      shareReplay()
-    );
-
-  navItems: NavItem[] = [
-    {
-      displayName: 'Resort',
-      iconName: 'attractions',
-      children: [
-        {
-          displayName: 'Resort List',
-          iconName: 'checklist',
-          route: '/resort',
-        },
-        {
-          displayName: 'Resort ADD',
-          iconName: 'add_circle_outline',
-          route: '/resort/add',
-        },
-      ],
-    },
-    {
-      displayName: 'Room',
-      iconName: 'king_bed',
-      children: [
-        {
-          displayName: 'Room List',
-          iconName: 'format_list_bulleted',
-          route: '/room',
-        },
-        {
-          displayName: 'Room ADD',
-          iconName: 'add_circle',
-          route: '/room/add',
-        },
-      ],
-    },
-  ];
+  private _mobileQueryListener: () => void;
+  routerOutletActive: boolean = true; //false;
 
   constructor(
-    private breakpointObserver: BreakpointObserver,
-    private navService: NavService,
+    // private authService: AuthService,
+    private commonService: CommonService,
     private asyncService: AsyncService,
+    private router: Router,
     private changeDetectorRef: ChangeDetectorRef,
-    private commonService: CommonService
-  ) {}
+    public navService: NavService,
+    media: MediaMatcher
+  ) {
+    this.mobileQuery = media.matchMedia('(max-width: 600px)');
+    this._mobileQueryListener = () => this.changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
+  }
 
   ngOnInit(): void {
     // this.isLoggedIn$ = this.authService.isLoggedIn;
@@ -95,20 +64,27 @@ export class NavMenuComponent implements OnInit, AfterViewInit, OnDestroy {
       this.changeDetectorRef.detectChanges();
     });
 
+    // this.authSub = this.authService.authInfo.subscribe((authInfo) => {
+    //   this.authInfo = authInfo;
+    //   this.routerOutletActive = true;
+    //   this.changeDetectorRef.detectChanges();
+    // });
+
     this.asyncSub = this.asyncService.isLoading.subscribe((loading) => {
       this.isLoading = loading;
       this.changeDetectorRef.detectChanges();
     });
+
+    this.asyncService.finish(); // close aborted loading
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.navService.appDrawer = this.appDrawer;
   }
-
-  ngOnDestroy() {
-    if (this.asyncSub) {
-      this.asyncSub.unsubscribe();
-    }
+  onLogOut(): void {
+    // this.authService.logout();
+    this.appDrawer.close(); // closing sidenav
+    this.router.navigate(['/auth']);
   }
 
   toggleFullScreen(): void {
@@ -144,5 +120,13 @@ export class NavMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     } else if (doc.msExitFullscreen) {
       doc.msExitFullscreen();
     }
+  }
+
+  ngOnDestroy() {
+    this.mobileQuery.removeListener(this._mobileQueryListener);
+    this.uiInfoSub.unsubscribe();
+    this.authSub.unsubscribe();
+    this.asyncSub.unsubscribe();
+    this.asyncService.finish();
   }
 }

@@ -1,10 +1,22 @@
-import {EventEmitter, Injectable} from '@angular/core';
-
+import { Injectable } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
+import { Event, Router, NavigationEnd } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class NavService {
-  public appDrawer: any;
+  public appDrawer: MatSidenav;
+  public currentUrl = new BehaviorSubject<string>(undefined);
 
-  constructor() {
+  constructor(private router: Router) {
+    this.router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationEnd) {
+        this.currentUrl.next(event.urlAfterRedirects);
+      }
+    });
+  }
+
+  public toggle() {
+    this.appDrawer.toggle();
   }
 
   public closeNav() {

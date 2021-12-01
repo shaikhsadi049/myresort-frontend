@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { AsyncService } from 'src/app/shared/services/async.service';
+import { CommonService } from 'src/app/shared/services/common.service';
 import { ResortService } from '../service/resort.service';
 
 @Component({
@@ -13,9 +15,20 @@ export class ResortAddComponent implements OnInit {
   form: FormGroup;
   addResortSub: Subscription;
 
-  constructor(private fb: FormBuilder, private resortService: ResortService) {}
+  constructor(
+    private fb: FormBuilder,
+    private resortService: ResortService,
+    private asyncService: AsyncService,
+    private commonService: CommonService
+  ) {}
 
   ngOnInit(): void {
+    this.commonService.setUiInfo({
+      formId: this.formId,
+      goBackPath: '/resort',
+      title: 'Resort Add',
+    });
+
     this.form = this.fb.group({
       resortName: ['', Validators.required],
       address: ['', Validators.required],

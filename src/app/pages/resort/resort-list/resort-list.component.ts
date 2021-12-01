@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscriber, Subscription } from 'rxjs';
+import { AsyncService } from 'src/app/shared/services/async.service';
+import { CommonService } from 'src/app/shared/services/common.service';
 import { Resort } from '../model/resort.model';
 import { ResortService } from '../service/resort.service';
 
@@ -28,13 +30,22 @@ export class ResortListComponent implements OnInit {
   //    isBBQExist: false
   //  };
 
-  constructor(private resortService: ResortService) {}
+  constructor(
+    private resortService: ResortService,
+    private asyncService: AsyncService,
+    private commonService: CommonService
+  ) {}
 
   ngOnInit(): void {
+    this.commonService.setUiInfo({
+      refresh: this.getResortList,
+      title: 'Resort List',
+    });
     this.getResortList();
   }
 
   getResortList() {
+    this.asyncService.start();
     this.resortViewSub = this.resortService.resortList().subscribe((data) => {
       if (data && data.data.length) {
         this.resortListArr = data.data;
@@ -43,6 +54,7 @@ export class ResortListComponent implements OnInit {
         this.totalRecords = this.resortListArr.length;
         console.log(this.resortListArr);
       }
+      this.asyncService.finish();
     });
   }
 

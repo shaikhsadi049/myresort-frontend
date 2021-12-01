@@ -34,14 +34,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HomeComponent } from './components/home/home.component';
-import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { NavService } from './services/nav-menu.service';
-import { MenuListItemComponent } from './components/menu-list-item/menu-list-item.component';
-import { TopNavComponent } from './components/top-nav/top-nav.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from './components/confirmation-dialog.component';
 import { CommonService } from './services/common.service';
+import { NavMenuItemComponent } from './components/nav-menu-item/nav-menu-item.component';
+import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 
 @NgModule({
   imports: [
@@ -122,14 +121,11 @@ import { CommonService } from './services/common.service';
     FormsModule,
     HomeComponent,
     NavMenuComponent,
-    MenuListItemComponent,
-    TopNavComponent,
   ],
   declarations: [
     HomeComponent,
     NavMenuComponent,
-    MenuListItemComponent,
-    TopNavComponent,
+    NavMenuItemComponent,
     ConfirmDialogComponent,
   ],
   entryComponents: [ConfirmDialogComponent],
@@ -138,7 +134,7 @@ export class SharedModule {
   static forRoot(): ModuleWithProviders<SharedModule> {
     return {
       ngModule: SharedModule,
-      providers: [NavService,CommonService],
+      providers: [NavService, CommonService],
     };
   }
 }

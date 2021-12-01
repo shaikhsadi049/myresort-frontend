@@ -1,7 +1,4 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
-
-import { Router } from '@angular/router';
-
 import {
   animate,
   state,
@@ -11,11 +8,12 @@ import {
 } from '@angular/animations';
 import { NavService } from '../../services/nav-menu.service';
 import { NavItem } from '../../models/nav.item';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-menu-list-item',
-  templateUrl: './menu-list-item.component.html',
-  styleUrls: ['./menu-list-item.component.scss'],
+  selector: 'nav-menu-item',
+  templateUrl: './nav-menu-item.component.html',
+  styleUrls: ['./nav-menu-item.component.scss'],
   animations: [
     trigger('indicatorRotate', [
       state('collapsed', style({ transform: 'rotate(0deg)' })),
@@ -27,17 +25,25 @@ import { NavItem } from '../../models/nav.item';
     ]),
   ],
 })
-export class MenuListItemComponent {
+export class NavMenuItemComponent implements OnInit {
   expanded: boolean = false;
-
   @HostBinding('attr.aria-expanded') ariaExpanded = this.expanded;
-  @Input() item: NavItem | undefined;
+  @Input() item: NavItem;
   @Input() depth: number;
 
   constructor(public navService: NavService, public router: Router) {
     if (this.depth === undefined) {
       this.depth = 0;
     }
+  }
+
+  ngOnInit() {
+    this.navService.currentUrl.subscribe((url: string) => {
+      if (this.item.route && url) {
+        this.expanded = url.indexOf(`/${this.item.route}`) === 0;
+        this.ariaExpanded = this.expanded;
+      }
+    });
   }
 
   onItemSelected(item: NavItem) {
