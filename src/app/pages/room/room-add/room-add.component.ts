@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { AsyncService } from 'src/app/shared/services/async.service';
@@ -14,6 +14,7 @@ import { ResortService } from '../../resort/service/resort.service';
 export class RoomAddComponent implements OnInit {
   formId = 'roomsAddForm';
   form: FormGroup;
+  roomArr: any = [];
 
   filteredResort: Observable<any[]>;
 
@@ -26,12 +27,12 @@ export class RoomAddComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      resortId: [''],
-      resortName: [''],
-      roomName: [''],
-      description: [''],
-      price: [''],
-      isVatIncluded: [''],
+      resortId: ['', Validators.required],
+      resortName: ['', Validators.required],
+      roomName: ['', Validators.required],
+      description: ['', Validators.required],
+      price: ['', Validators.required],
+      isVatIncluded: [false, Validators.required],
     });
 
     this.commonService.setUiInfo({
@@ -89,5 +90,37 @@ export class RoomAddComponent implements OnInit {
 
   onAddRooms = () => {};
 
-  addroom() {}
+  addroom() {
+    if (!this.form.valid) {
+      this.commonService.showErrorMsg(`ALL Fields Required`);
+      return;
+    }
+
+    this.roomArr.push({
+      resortId: this.resortId.value, // or this.form.get('resortId').value
+      resortName: this.resortName.value, // or this.form.get('resortId').value
+      roomName: this.roomName.value,
+      description: this.description.value,
+      price: this.price.value,
+      isVatIncluded: this.isVatIncluded.value,
+    });
+
+    // this.form.patchValue({
+    //   roomName: '',
+    //   description: '',
+    //   price: '',
+    //   isVatIncluded: false,
+    // });
+    //  OR
+    this.roomName.patchValue('');
+    this.description.patchValue('');
+    this.price.patchValue('');
+    this.isVatIncluded.patchValue(false);
+  }
+
+  deleteRoom(value: any, index: any) {
+    this.roomArr = this.roomArr.filter(
+      (cs: any) => cs.roomName !== value.roomName
+    );
+  }
 }
