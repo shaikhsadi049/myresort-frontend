@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 const resortUrl = 'http://localhost:3000/api/resort';
-const rooUrl = 'http://localhost:3000/api/rooms';
+const roomUrl = 'http://localhost:3000/api/rooms';
 
 @Injectable({
   providedIn: 'root',

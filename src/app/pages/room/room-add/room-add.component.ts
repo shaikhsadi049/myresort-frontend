@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { Router } from '@angular/router';
+import { Observable, of, Subscription } from 'rxjs';
 import { debounceTime, startWith, switchMap } from 'rxjs/operators';
 import { AsyncService } from 'src/app/shared/services/async.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ResortService } from '../../resort/service/resort.service';
+import { RoomService } from '../service/room.service';
 
 @Component({
   selector: 'app-room-add',
@@ -14,15 +16,22 @@ import { ResortService } from '../../resort/service/resort.service';
 export class RoomAddComponent implements OnInit {
   formId = 'roomsAddForm';
   form: FormGroup;
-  roomArr: any = [];
+  roomList: any = [];
+  addRoomSub: Subscription;
+
+  defaultImage = '/assets/images/avatar_square_blue.png';
+  roomPicture: string;
+  defaultAvatar: string = this.defaultImage;
 
   filteredResort: Observable<any[]>;
 
   constructor(
     private fb: FormBuilder,
     private resortService: ResortService,
+    private roomService: RoomService,
     private asyncService: AsyncService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -32,6 +41,7 @@ export class RoomAddComponent implements OnInit {
       roomName: ['', Validators.required],
       description: ['', Validators.required],
       price: ['', Validators.required],
+      imagePath: ['asdas', Validators.required],
       isVatIncluded: [false, Validators.required],
     });
 
@@ -61,22 +71,21 @@ export class RoomAddComponent implements OnInit {
   get resortId() {
     return this.form.get('resortId');
   }
-
   get resortName() {
     return this.form.get('resortName');
   }
-
   get roomName() {
     return this.form.get('roomName');
   }
   get description() {
     return this.form.get('description');
   }
-
   get price() {
     return this.form.get('price');
   }
-
+  get imagePath() {
+    return this.form.get('imagePath');
+  }
   get isVatIncluded() {
     return this.form.get('isVatIncluded');
   }
@@ -84,11 +93,7 @@ export class RoomAddComponent implements OnInit {
   onSelectResort(value: any) {
     this.resortId.patchValue(value._id);
     this.resortName.patchValue(value.resortName);
-
-    console.log(this.form.value);
   }
-
-  onAddRooms = () => {};
 
   addroom() {
     if (!this.form.valid) {
@@ -96,13 +101,14 @@ export class RoomAddComponent implements OnInit {
       return;
     }
 
-    this.roomArr.push({
+    this.roomList.push({
       resortId: this.resortId.value, // or this.form.get('resortId').value
       resortName: this.resortName.value, // or this.form.get('resortId').value
       roomName: this.roomName.value,
       description: this.description.value,
       price: this.price.value,
       isVatIncluded: this.isVatIncluded.value,
+      imagePath: this.imagePath.value,
     });
 
     // this.form.patchValue({
@@ -119,8 +125,35 @@ export class RoomAddComponent implements OnInit {
   }
 
   deleteRoom(value: any, index: any) {
-    this.roomArr = this.roomArr.filter(
+    this.roomList = this.roomList.filter(
       (cs: any) => cs.roomName !== value.roomName
     );
+  }
+
+  onAddRooms = () => {
+    if (!this.roomList.length) {
+      this.commonService.showErrorMsg(`Room Not Found`);
+      return;
+    }
+
+    this.addRoomSub = this.roomService
+      .roomAdd({ roomList: this.roomList })
+      .subscribe(
+        (response) => {
+          if (response) {
+            this.commonService.showSuccessMsg(`Rooms Added Successfully`);
+            this.router.navigate(['/room']);
+          }
+        },
+        (err) => {
+          this.commonService.showErrorMsg(err);
+        }
+      );
+  };
+
+  ngOnDestroy(): void {
+    if (this.addRoomSub) {
+      this.addRoomSub.unsubscribe();
+    }
   }
 }

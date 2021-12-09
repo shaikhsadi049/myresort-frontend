@@ -148,7 +148,7 @@
 </form>
 
 <table
-  [hidden]="roomArr.length == 0"
+  [hidden]="roomList.length == 0"
   style="
     margin-top: 20px;
     width: 50%;
@@ -167,7 +167,7 @@
     <th>Action</th>
   </thead>
   <tbody style="width: 80%; text-align: center">
-    <tr *ngFor="let item of roomArr; let i = index">
+    <tr *ngFor="let item of roomList; let i = index">
       <td>{{ i + 1 }}</td>
       <td>{{ item?.resortName }}</td>
       <td>{{ item?.roomName }}</td>

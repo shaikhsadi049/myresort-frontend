@@ -38,8 +38,8 @@ export class ResortListComponent implements OnInit {
 
   ngOnInit(): void {
     this.commonService.setUiInfo({
-      refresh: this.getResortList,
-      title: 'Resort List',
+      goBackPath: '/resort',
+      title: 'Resort Details',
     });
     this.getResortList();
   }
